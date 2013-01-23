@@ -1,13 +1,14 @@
-
 /**
- * Module dependencies.
+ * This file handles the main configuration for the application
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path');
+// Import node modules (dependencies) that the app uses
+var express = require('express');
+var http = require('http');
+var path = require('path');
+// Import routes for application
+var routes = require('./routes');
+var user = require('./routes/user');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.get('/signup', user.signup)
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){

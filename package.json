@@ -1,13 +1,16 @@
 {
-  "name": "dischost",
+  "name": "Dischost",
+  "description": "Music Catalogue Application - 4th Year Final Project",
   "version": "0.0.1",
+  "author": "Daniel McKay <mckayefc@gmail.com>",
   "private": true,
   "scripts": {
     "start": "nodemon app.js"
   },
   "dependencies": {
     "express": "3.0.6",
-    "jade": "*"
+    "jade": "*",
+    "nano": "3.3.7"
   },
   "devDependencies": {
     "nodemon": "*"
