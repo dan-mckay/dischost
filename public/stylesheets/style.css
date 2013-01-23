@@ -1,8 +1,59 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 18px Helvetica, Arial, sans-serif;
+  background-color: #E5E5E5;
+  color: #191919;
+}
+
+h1 {
+	font-size: 1.6em;
 }
 
 a {
   color: #00B7FF;
+}
+
+/***********TYPOGRAPHY************/
+
+.bold {
+	font-weight: bold;
+}
+
+/***********HEADER************/
+
+header {
+	background-color: #000;
+	color: #fff;
+	border-bottom: #fefefe solid 1px;
+	overflow: hidden;
+	padding: 15px 0 10px 15px;
+}
+
+header a {
+	float: left;
+}
+
+nav {
+	float: right;
+}
+
+nav li {
+	display: inline-block;
+	margin-right: 15px;
+}
+
+#container {
+	width: 960px;
+	margin: 0 auto;
+}
+
+/***********LANDING PAGE************/
+
+#mainlogo {
+	width: 461px;
+	text-align: center;
+	margin: 160px auto 0 auto;
+}
+
+#mainlogo img {
+	margin: 40px 0;
 }

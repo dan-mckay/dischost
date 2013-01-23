@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div#mainlogo
+    p.bold Welcome to #{title}
+    img(src='/images/logo-lg-black.png', alt='Dischost')
+    a(href='/signup') Sign Up

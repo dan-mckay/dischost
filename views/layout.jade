@@ -1,7 +1,16 @@
 doctype 5
-html
+html(lang="en")
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/reset.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    header
+      a(href='/')
+        img(src='/images/logo-sml.png', alt='Dischost')
+      nav
+        ul
+          li Login
+          li Search
+    div#container
+      block content
