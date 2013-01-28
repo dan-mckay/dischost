@@ -10,8 +10,8 @@ block content
       label(for="email") Email:
       input#email(type="email", name="email")
       br
-      label(for="countries") Country:
-      select#countries(name="countries", value="Please Select...")
+      label(for="country") Country:
+      select#country(name="country", value="Please Select...")
         each country in countryList
           option(value="#{country}") #{country}
       br
