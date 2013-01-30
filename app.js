@@ -21,6 +21,7 @@ app.configure(function(){
   app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
+  app.use(express.cookieParser('This~String~Is~Secret'));
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
