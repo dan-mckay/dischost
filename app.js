@@ -9,7 +9,6 @@ var path = require('path');
 // Import routes for application
 var routes = require('./routes');
 var user = require('./routes/user');
-var db = require('./routes/database')
 
 
 var app = express();
@@ -34,7 +33,12 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/signup', user.signup);
 app.get('/users', user.list);
-app.post('/newuser', db.newuser);
+app.post('/newUser', user.newUser, function(req, res, next) {
+  console.log("3")
+  user = req.user;
+  res.redirect('/user/' + res.user.username);
+});
+app.get('/user/:username', user.userpage);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
