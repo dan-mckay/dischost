@@ -31,8 +31,9 @@ exports.newUser = function(req, res, next) {
         // handle error with status code
       }
       else {
-        console.log("2");
-        next();
+        console.log("2")
+        user = req.user;
+        res.redirect('/user/' + res.user.username)
       }
     });
     
@@ -43,5 +44,6 @@ exports.newUser = function(req, res, next) {
 };
 
 exports.userpage = function (req, res) {
+  
   res.send("user homepage");
 };

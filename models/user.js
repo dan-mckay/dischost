@@ -24,7 +24,6 @@ exports.createUser = function(req, res, next) {
         console.log('Status Code: ' + response.statusCode);
         user._rev = body.rev;
         res.user = user;
-        console.log("1")
         next();
       } 
     });

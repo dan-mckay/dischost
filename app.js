@@ -33,11 +33,7 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/signup', user.signup);
 app.get('/users', user.list);
-app.post('/newUser', user.newUser, function(req, res, next) {
-  console.log("3")
-  user = req.user;
-  res.redirect('/user/' + res.user.username);
-});
+app.post('/newUser', user.newUser);
 app.get('/user/:username', user.userpage);
 
 http.createServer(app).listen(app.get('port'), function(){
