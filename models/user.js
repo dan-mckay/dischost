@@ -7,10 +7,10 @@ var userRoutes = require('../routes/user.js');
 var host = "http://127.0.0.1:5984/";
 var db = "dischost/";
 
-
 // CREATE NEW USER
 exports.createUser = function(req, res, next) {
-  var user = req.user;
+  var user = req.body;
+  console.log("model user: " + req.body)
   // use the "request" module to build the request to database
   request.put( {
       url: host + db + user._id,
@@ -22,8 +22,6 @@ exports.createUser = function(req, res, next) {
       }
       if(response.statusCode == 201) {
         console.log('Status Code: ' + response.statusCode);
-        user._rev = body.rev;
-        res.user = user;
         next();
       } 
     });

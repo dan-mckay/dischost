@@ -23,7 +23,8 @@ exports.newUser = function(req, res, next) {
       email: req.body.email,
       password: req.body.password
     };
-    req.user = user;
+    req.body = user;
+    console.log("route user: " + req.body)
     db.createUser(req, res, function(err) {
       if(err) {
         console.log("Error Saving Data");
@@ -31,9 +32,7 @@ exports.newUser = function(req, res, next) {
         // handle error with status code
       }
       else {
-        console.log("2")
-        user = req.user;
-        res.redirect('/user/' + res.user.username)
+        res.render('success', { title: 'Dischost - Success' });
       }
     });
     
@@ -43,7 +42,6 @@ exports.newUser = function(req, res, next) {
   }
 };
 
-exports.userpage = function (req, res) {
-  
-  res.send("user homepage");
+exports.login = function(req, res) {
+  res.render('login', { title: 'Dischost - Login' });
 };
