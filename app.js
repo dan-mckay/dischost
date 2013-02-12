@@ -13,6 +13,9 @@ var user = require('./routes/user');
 
 var app = express();
 
+// Set up a place in memory to store the session data
+var MemStore = express.session.MemoryStore;
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -20,7 +23,10 @@ app.configure(function(){
   app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
-  app.use(express.cookieParser('This~String~Is~Secret'));
+  app.use(express.cookieParser());
+  app.use(express.session({secret: 'ThisStringIsSecret', store: MemStore({
+    reapInterval: 60000 * 10
+  })}));
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
@@ -32,10 +38,22 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/signup', user.signup);
-app.get('/users', user.list);
+app.get('/users', requiresLogin, user.list);
 app.post('/newUser', user.newUser);
 app.get('/login', user.login);
+app.get('/logout', user.logout);
 app.post('/loginuser', user.loginUser);
+app.get('/noauth', user.noAuth);
+app.get('/users/:username', user.userpage);
+
+function requiresLogin(req, res, next) {
+  if(req.session.user) {
+    next();
+  }
+  else {
+    redirect('/noauth');
+  }
+};
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

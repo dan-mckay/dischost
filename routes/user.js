@@ -13,6 +13,12 @@ exports.list = function(req, res) {
   res.send("respond with a resource");
 };
 
+exports.noAuth = function(req, res) {
+  res.send("NOT AUTHORIZED");
+  //TODO
+  // redirect to a page
+};
+
 exports.newUser = function(req, res, next) {
   if(req.method == "POST") {
     var user = {
@@ -24,7 +30,7 @@ exports.newUser = function(req, res, next) {
       password: req.body.password
     };
     req.body = user;
-    console.log("route user: " + req.body)
+    // Put user into database
     db.createUser(req, res, function(err) {
       if(err) {
         console.log("Error Saving Data");
@@ -35,7 +41,6 @@ exports.newUser = function(req, res, next) {
         res.render('success', { title: 'Dischost - Success' });
       }
     });
-    
   }
   else {
     console.log("Not a post request - error");
@@ -44,6 +49,11 @@ exports.newUser = function(req, res, next) {
 
 exports.login = function(req, res) {
   res.render('login', { title: 'Dischost - Login' });
+};
+
+exports.logout = function(req, res) {
+  delete res.session.user;
+  res.redirect('/');
 };
 
 exports.loginUser = function(req, res) {
@@ -57,11 +67,14 @@ exports.loginUser = function(req, res) {
       else {
         if(res.body.rows.length === 1) {
           var user = res.body.rows[0].value;
-          console.log(user);
-          //res.render('user', { title: 'Dischost - User Homepage' });
+          if(user.username === req.body.username && user.password === req.body.password) {
+            req.session.user = user;
+            req.session.loggedin = true;
+            res.render('userhome/' + user.username, { title: 'Dischost - User Homepage', user: user });
+          }
         }
         else {
-          console.log("No User Found");
+          res.send('<p>User Not Found</p>')
         }
       }
     });
@@ -69,4 +82,25 @@ exports.loginUser = function(req, res) {
   else {
     console.log("Not a post request - error");
   }
+};
+
+exports.userpage = function(req, res) {
+  req.body.username = req.params.username;
+  db.getUserByName(req, res, function(err) {
+      if(err) {
+        console.log("Error Getting User");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        if(res.body.rows.length === 1) {
+          var user = res.body.rows[0].value;
+          //res.render('userhome/' + user.username, { title: 'Dischost - User Homepage', user: user });
+          res.send(user);
+        }
+        else {
+          res.send('<p>User Not Found</p>')
+        }
+      }
+    });
 };
