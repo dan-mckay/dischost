@@ -13,7 +13,7 @@ exports.list = function(req, res) {
   res.send("respond with a resource");
 };
 
-exports.noAuth = function(req, res) {
+exports.noAuth = function(req, res, next) {
   res.send("NOT AUTHORIZED");
   //TODO
   // redirect to a page
@@ -52,7 +52,7 @@ exports.login = function(req, res) {
 };
 
 exports.logout = function(req, res) {
-  delete res.session.user;
+  delete req.session.user;
   res.redirect('/');
 };
 
@@ -69,8 +69,11 @@ exports.loginUser = function(req, res) {
           var user = res.body.rows[0].value;
           if(user.username === req.body.username && user.password === req.body.password) {
             req.session.user = user;
-            req.session.loggedin = true;
-            res.render('userhome/' + user.username, { title: 'Dischost - User Homepage', user: user });
+            /*res.render('userhome/' + user.username, { 
+              title: 'Dischost - User Homepage', 
+              user: user 
+            });*/
+            res.redirect('dash');
           }
         }
         else {
@@ -103,4 +106,49 @@ exports.userpage = function(req, res) {
         }
       }
     });
+};
+
+exports.dash = function(req, res) {
+  res.render('dash', { 
+    title: 'Dischost: ' + req.session.user.username + ' dash',
+    user: req.session.user 
+  });
+};
+
+exports.editprofile = function(req, res) {
+  res.render('editprofile', { 
+    title: 'Dischost: ' + req.session.user.username + ' edit',
+    user: req.session.user, 
+    countryList: countries 
+  });
+};
+
+exports.edituser = function(req, res, next) {
+    if(req.method == "PUT") {
+      var user = {
+        _id: req.session.user._id,
+        username: req.body.username,
+        collection: "user",
+        country: req.body.country,
+        email: req.body.email,
+        password: req.body.password, 
+        _rev: req.session.user._rev
+      };
+      req.body = user;
+      // Put user into database
+      db.editUserDetails(req, res, function(err) {
+        if(err) {
+          console.log("Error Saving Data");
+          //TODO
+          // handle error with status code
+        }
+        else {
+          console.log(res.body)
+          res.render('success', { title: 'Dischost - Success' });
+        }
+      });
+    }
+    else {
+      console.log("Not a put request - error");
+    }
 };

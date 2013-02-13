@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  div#edituserform
+    h1 Edit your profile
+    form(action="/edituser", method="POST")
+      input(type="hidden", name="_method", value="put")
+      label(for="username") Username:
+      input#username(type="text", name="username", value="#{user.username}")
+      br
+      label(for="email") Email:
+      input#email(type="email", name="email", value="#{user.email}")
+      br
+      label(for="country") Country:
+      select#country(name="country", value="Please Select...")
+        each country in countryList
+          option(value="#{country}") #{country}
+      br
+      label(for="password") Password:
+      input#password(type="password", name="password")
+      br
+      label#confirm(for="confirm") Confirm:
+      input(type="password", name="confirm")
+      br
+      a.left.editlink(href='/dash') Cancel
+      button(class="submitbtn", role="button") Save Changes
+      br
+    div.errormsgs
+      h3  - you must:
+      ul
+        li Enter a valid username
+        li Enter a valid Email
+        li Select a country
+        li Enter a valid password
+        li Make sure your passwords match
+  div#records
+    img(src='/images/logo-lg-grey.png', alt='Records')
+      

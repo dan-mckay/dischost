@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  div#user
+    img(src='/images/avatar.png', alt='User Avatar', width='200px', height='200px')
+    div#user-details
+      h1.lge-head #{user.username}
+      h2 Country: #{user.country}
+      h3 Email: #{user.email}
+      a(href='/editprofile') Edit Profile

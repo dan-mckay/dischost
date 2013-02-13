@@ -51,3 +51,22 @@ exports.getUserByName = function(req, res, next) {
     } 
   });
 }
+
+exports.editUserDetails = function(req, res, next) {
+  var user = req.body;
+  // use the "request" module to build the request to database
+  request.put( {
+      url: host + db + user._id,
+      json: user
+    }, 
+    function (err, response, body) {
+      if(err) {
+        throw new Error(err);
+      }
+      if(response.statusCode == 201) {
+        console.log('Status Code: ' + response.statusCode);
+        res.body = JSON.parse(response.body);
+        next();
+      } 
+    });
+};

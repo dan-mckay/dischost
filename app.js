@@ -38,20 +38,24 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/signup', user.signup);
-app.get('/users', requiresLogin, user.list);
-app.post('/newUser', user.newUser);
+app.get('/users', user.list);
+app.post('/newuser', user.newUser);
 app.get('/login', user.login);
 app.get('/logout', user.logout);
 app.post('/loginuser', user.loginUser);
 app.get('/noauth', user.noAuth);
 app.get('/users/:username', user.userpage);
+app.get('/dash', requiresLogin, user.dash);
+app.get('/editprofile',requiresLogin, user.editprofile);
+app.put('/edituser', requiresLogin, user.edituser)
 
 function requiresLogin(req, res, next) {
   if(req.session.user) {
     next();
   }
   else {
-    redirect('/noauth');
+    res.send(401);
+    // next(new Error(401));
   }
 };
 
