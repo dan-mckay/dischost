@@ -134,7 +134,7 @@ exports.edituser = function(req, res, next) {
         password: req.body.password, 
         _rev: req.session.user._rev
       };
-      req.body = user;
+      req.body = user;         // Set req body to updated user details
       // Put user into database
       db.editUserDetails(req, res, function(err) {
         if(err) {
@@ -143,8 +143,10 @@ exports.edituser = function(req, res, next) {
           // handle error with status code
         }
         else {
-          console.log(res.body)
-          res.render('success', { title: 'Dischost - Success' });
+          // Update sesssion user object
+          req.session.user = user;
+          req.session.user._rev = res.body.rev;
+          res.redirect('dash');
         }
       });
     }

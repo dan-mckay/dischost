@@ -3,7 +3,6 @@
  */
 var querystring = require('querystring');
 var request = require('request');
-var userRoutes = require('../routes/user.js');
 
 var host = "http://127.0.0.1:5984/";
 var db = "dischost/";
@@ -52,6 +51,7 @@ exports.getUserByName = function(req, res, next) {
   });
 }
 
+// EDIT USER
 exports.editUserDetails = function(req, res, next) {
   var user = req.body;
   // use the "request" module to build the request to database
@@ -65,7 +65,8 @@ exports.editUserDetails = function(req, res, next) {
       }
       if(response.statusCode == 201) {
         console.log('Status Code: ' + response.statusCode);
-        res.body = JSON.parse(response.body);
+        res.body = response.body;
+        //console.log(body + '\n\n');
         next();
       } 
     });

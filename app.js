@@ -9,6 +9,7 @@ var path = require('path');
 // Import routes for application
 var routes = require('./routes');
 var user = require('./routes/user');
+var music = require('./routes/music');
 
 
 var app = express();
@@ -47,7 +48,10 @@ app.get('/noauth', user.noAuth);
 app.get('/users/:username', user.userpage);
 app.get('/dash', requiresLogin, user.dash);
 app.get('/editprofile',requiresLogin, user.editprofile);
-app.put('/edituser', requiresLogin, user.edituser)
+app.put('/edituser', requiresLogin, user.edituser);
+
+app.get('/addmusic', requiresLogin, music.addmusic);
+app.post('/addmusicitem', requiresLogin, music.addmusicitem);
 
 function requiresLogin(req, res, next) {
   if(req.session.user) {

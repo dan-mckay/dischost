@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  div#addmusicform
+    h1 Add Music
+    form(action="/addmusicitem", method="POST")
+      label(for="artist") Artist:
+      input#artist(type="text", name="artist")
+      br
+      label(for="title") Title:
+      input#title(type="text", name="title")
+      br
+      label(for="label") Record Label:
+      input#label(type="text", name="label")
+      br
+      label(for="year") Year:
+      input#year(type="text", name="year")
+      br
+      label(for="format") Format:
+      select#format(name="format", value="Please Select...")
+        formats = [ 'PLEASE SELECT...', 'LP', 'CD', 'EP', '12"', '7"', 'Digital']
+        each format in formats
+          option(value="#{format}") #{format}
+      br
+      label(for="review") Review:
+      textarea#review(name="review", cols="24", rows="5", placeholder="Reviews are optional.")
+      br
+      button(class="submitbtn", role="button") Add Music
+      br
+  div.errormsgs
+    h3  - you must:
+    ul
+      li Enter a valid username
+      li Enter a valid Email
+      li Select a country
+      li Enter a valid password
+      li Make sure your passwords match
+  div#records
+    img(src='/images/logo-lg-grey.png', alt='Records')
+      

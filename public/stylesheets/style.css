@@ -49,6 +49,11 @@ a {
 	float: right;
 }
 
+#container-sml {
+	width: 740px;
+	margin: 0 auto;
+}
+
 /***********FORMS************/
 
 /*form {
@@ -61,7 +66,6 @@ a {
 label {
 	float: left;
 	text-align: left;
-	
 	width: 100px;
 	padding-top: 10px;
 }
@@ -69,7 +73,8 @@ label {
 input[type=text],
 input[type=email],
 input[type=password],
-select {
+select, 
+textarea {
 	border: 2px solid white;
 	border-radius: 5px;
   box-shadow: 
@@ -85,12 +90,17 @@ select {
 input[type=text]:focus,
 input[type=email]:focus,
 input[type=password]:focus,
-select:focus {
+select:focus, 
+textarea:focus {
 	border: 2px solid #00B7FF;
 }
 
 select {
 	width: 218px;
+}
+
+textarea {
+  resize: none;
 }
 
 .submitbtn {
@@ -126,9 +136,9 @@ select {
 	border: 2px solid red;
 	border-radius: 5px;
 	padding: 10px 10px 3px 10px;
-	float: right;
-	clear: both;
-	margin-top: 15px;
+	float: left;
+	margin: 95px 0 0 50px;
+	visibility: hidden;
 }
 
 .errormsgs h3 {
@@ -139,6 +149,7 @@ select {
 	list-style-type: none;
 	padding-bottom: 7px;
 	font-size: 13px;
+	display: block;
 }
 
 /***********HEADER************/
@@ -189,20 +200,24 @@ nav a:hover {
 	margin-bottom: 20px;
 }
 
-/***********SIGNUP/EDIT PAGES************/
+/***********FORM PAGES************/
 
-#signupform, #edituserform {
+#signupform,
+#edituserform,
+#addmusicform {
 	float: left;
 }
 
-#signupform h1, #edituserform h1 {
+#signupform h1,
+#edituserform h1,
+#addmusicform h1 {
 	text-align: center;
 	margin: 30px 0 30px 0;
 }
 
 #records {
-	float: right;
-	margin: 80px 0 0 20px;
+	float: left;
+	margin: 80px 0 0 0;
 }
 
 /***********SUCCESS PAGE************/
@@ -235,12 +250,16 @@ nav a:hover {
 /***********USER DASH************/
 
 #user {
-	border: 2px solid #ddd;
-	border-radius: 30px;
+	border: 8px solid #ddd;
+	border-radius: 10px;
 	padding: 20px;
 	background-color: #444444;
 	margin: 20px 0 0 0;
 	overflow: auto;
+	box-shadow: 
+	inset 0 0 20px  rgba(0,0,0,0.6),
+	      0 0 40px rgba(0,0,0,0.6);
+  background: rgba(255,255,255,0.5);
 }
 
 #user img {
@@ -249,10 +268,70 @@ nav a:hover {
 }
 
 #user-details {
+	color: #212121;
+	float: left;
+}
 
+#add-release {
+	width: 100px;
+	height: 200px;
+	float: right;
+	color: #fff;
+	box-shadow: 
+	inset 0 0 20px  rgba(0,0,0,0.6);
+  background: rgba(0,183,255,0.5);
+  border-radius: 5px;
+  position: relative;
+}
+
+#add-release a {
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+}
+
+#add-release a:hover {
+	color: #212121;
+}
+
+#add-release a:active {
+	color: #444444;
+}
+
+#add-release span {
+	position:absolute; 
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+  z-index: 1;
+}
+
+.plus {
+	font-size: 4em;
+	font-weight: bold;
+	margin-top: 30px;
+}
+
+.add-rel-txt {
+	font-size: 1.8em;
 }
 
 /***********EDIT USER PAGE************/
+
+#upload-av {
+	width: 200px;
+	padding: 20px;
+	background-color: #DEDEDE;
+	float: left;
+	color: #000;
+	border-radius: 5px;
+	margin: 95px 0 0 50px;
+}
+
+#upload-av img {
+	margin-bottom: 10px;
+}
 
 .editlink {
 	margin: 9px 0 0 100px;
