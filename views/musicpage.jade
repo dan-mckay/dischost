@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  script(src="/javascripts/musicpage.js")
+  div#music
+    div#left-col
+      img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+      div#review-div
+        h2#review-header.block-header Review
+          img#review-arrow.arrow(src="/images/arr-down.png")
+        div#review-text
+          p #{item.review}
+    div#right-col
+      div#rating
+        h2 User Rating
+        form#rating-form
+          input(type="hidden", name="dataset", value="apples")
+          input(type="hidden", name="dataset", value="oranges")
+          p#rating-label 3.8
+        script(src="/javascripts/d3.v3/d3.v3.min.js")
+        script(src="/javascripts/donut.js")
+      div#player-div
+        h2#player-header.block-header Player
+          img#player-arrow.arrow(src="/images/arr-down.png")
+        div#player-items
+          p#current-play Lorem ipsum dolor sit amet consectetur adipiscing
+          audio#player(controls)
+    div#centre
+      div#music-details
+        h1.lge-head #{item.title}
+        h2 #{item.artist}
+        p Label: #{item.label}
+        p Year: #{item.year}
+        p Format: #{item.format}
+      div#tracklist
+        h2#tracklist-header.block-header Tracklist
+          img#tracklist-arrow.arrow(src="/images/arr-down.png")
+        ul#tracklist-items
+          li Lorem ipsum dolor sit amet
+          li Consectetur adipiscing elit
+          li Aenean dapibus tempor elit, eu elementum purus varius
+          li Duis aliquam
+          li Integer metus dui, volutpat a posuere non
+          li Volutpat a posuere non
+          li Lorem ipsum dolor sit amet
+          li Consectetur adipiscing elit
+          li Aenean dapibus tempor elit, eu elementum purus varius
+          li Duis aliquam
+          li Integer metus dui, volutpat a posuere non
+          li Volutpat a posuere non
+      div#comments
+        h2#comments-header.block-header Comments
+          img#comments-arrow.arrow(src="/images/arr-down.png")
+        ul#comments-items
+          each comment in comments
+            li
+              p.comment-username #{comment.username}
+              p #{comment.comment}

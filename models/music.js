@@ -21,6 +21,7 @@ exports.createmusicitem = function(req, res, next) {
       }
       if(response.statusCode == 201) {
         console.log('Status Code: ' + response.statusCode);
+        res.body = response.body;
         next();
       } 
     });

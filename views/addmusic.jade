@@ -5,22 +5,23 @@ block content
     h1 Add Music
     form(action="/addmusicitem", method="POST")
       label(for="artist") Artist:
-      input#artist(type="text", name="artist")
+      input#artist.std-input(type="text", name="artist")
       br
       label(for="title") Title:
-      input#title(type="text", name="title")
+      input#title.std-input(type="text", name="title")
       br
       label(for="label") Record Label:
-      input#label(type="text", name="label")
+      input#label.std-input(type="text", name="label")
       br
       label(for="year") Year:
-      input#year(type="text", name="year")
+      input#year.std-input(type="text", name="year")
       br
       label(for="format") Format:
       select#format(name="format", value="Please Select...")
         formats = [ 'PLEASE SELECT...', 'LP', 'CD', 'EP', '12"', '7"', 'Digital']
         each format in formats
           option(value="#{format}") #{format}
+      span.select-arrow
       br
       label(for="review") Review:
       textarea#review(name="review", cols="24", rows="5", placeholder="Reviews are optional.")
@@ -35,6 +36,7 @@ block content
       li Select a country
       li Enter a valid password
       li Make sure your passwords match
-  div#records
-    img(src='/images/logo-lg-grey.png', alt='Records')
+  div#upload-art
+    img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+    p Drag an image from your file system onto the image above to update the artwork
       

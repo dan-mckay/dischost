@@ -8,8 +8,9 @@ body {
 
 h1 {
 	font-size: 2em;
-	font-family: 'Roboto Condensed', sans-serif;
 	margin-bottom: 20px;
+	color: #fff;
+	letter-spacing: -2px;
 }
 
 h2 {
@@ -56,13 +57,6 @@ a {
 
 /***********FORMS************/
 
-/*form {
-	padding: 30px 20px 40px 20px;
-	border: 5px solid #828282;
-	border-radius: 20px;
-	background-color: #141414;
-}*/
-
 label {
 	float: left;
 	text-align: left;
@@ -70,9 +64,10 @@ label {
 	padding-top: 10px;
 }
 
-input[type=text],
+.std-input,
 input[type=email],
 input[type=password],
+input[type=search],
 select, 
 textarea {
 	border: 2px solid white;
@@ -87,16 +82,22 @@ textarea {
   outline: none;
 } 
 
-input[type=text]:focus,
+.std-input:focus,
 input[type=email]:focus,
 input[type=password]:focus,
+input[type=search]:focus,
 select:focus, 
 textarea:focus {
 	border: 2px solid #00B7FF;
 }
 
+select, input[type=search] {
+	-webkit-appearance: none;
+}
+
 select {
 	width: 218px;
+	background: url(../images/select-arr.png) no-repeat right rgba(255,255,255,0.8);
 }
 
 textarea {
@@ -138,7 +139,6 @@ textarea {
 	padding: 10px 10px 3px 10px;
 	float: left;
 	margin: 95px 0 0 50px;
-	visibility: hidden;
 }
 
 .errormsgs h3 {
@@ -250,7 +250,6 @@ nav a:hover {
 /***********USER DASH************/
 
 #user {
-	border: 8px solid #ddd;
 	border-radius: 10px;
 	padding: 20px;
 	background-color: #444444;
@@ -262,7 +261,7 @@ nav a:hover {
   background: rgba(255,255,255,0.5);
 }
 
-#user img {
+.avatar {
 	float: left;
 	margin: 0 20px 0 0;
 }
@@ -317,9 +316,23 @@ nav a:hover {
 	font-size: 1.8em;
 }
 
-/***********EDIT USER PAGE************/
+#left-side {
+	float: left;
+	clear: both;
+	width: 550px;
+	margin: 40px 20px 0 0;
+}
 
-#upload-av {
+#right-side {
+	float: left;
+	width: 350px;
+	margin: 40px 0 0 0;
+}
+
+/***********ADD/EDIT PAGES************/
+
+#upload-av, 
+#upload-art {
 	width: 200px;
 	padding: 20px;
 	background-color: #DEDEDE;
@@ -329,10 +342,255 @@ nav a:hover {
 	margin: 95px 0 0 50px;
 }
 
-#upload-av img {
+#upload-av img,
+#upload-art img {
 	margin-bottom: 10px;
 }
 
 .editlink {
 	margin: 9px 0 0 100px;
+}
+
+
+
+/***********MUSIC USER PAGE************/
+
+#music {
+	border-radius: 10px;
+	padding: 20px;
+	background-color: #444444;
+	margin: 20px 0 0 0;
+	overflow: auto;
+	box-shadow: 
+	inset 0 0 20px  rgba(0,0,0,0.6),
+	      0 0 40px rgba(0,0,0,0.6);
+  background: rgba(255,255,255,0.5);
+}
+
+#left-col{
+	float: left;
+	width: 200px;
+}
+
+#centre {
+	width: 500px;
+	margin: 0 0 0 220px;
+}
+
+#right-col {
+	float: right;
+	width: 200px;
+}
+
+.arrow {
+	float: right;
+	margin: 3px;
+	cursor: pointer;
+}
+
+.flip-vertical {
+  -moz-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: flipv; /*IE*/
+}
+
+#music-details {
+	color: #212121;
+}
+
+#rating {
+	color: #fff;
+	text-align: center;
+}
+
+#rating-label {
+	position: absolute;
+	margin: 59px 0 0 69px;
+  display: block;
+  font-size: 3em;
+  text-align: center;
+  color: white;
+}
+
+#review-div {
+	width: 200px;
+	margin: 35px 0 0 0;
+}
+
+#review-text {
+	background-color: #B2B2B2;
+	padding: 10px;
+	border: 1px solid gray;
+}
+
+#review-text p {
+	line-height: 1.4em;
+}
+
+#tracklist, 
+#edit-tracklist {
+	margin: 80px 0 0 0;
+}
+
+#comments {
+	margin: 20px 0 0 0;
+}
+
+#tracklist li,
+#comments li, 
+#results li,
+#edit-tracklist li,
+#your-collection li,
+#your-comments li {
+	padding: 10px;
+	border: 1px solid gray;
+	border-bottom: none;
+	list-style-type: none;
+	background-color: #B2B2B2;
+}
+
+#tracklist li:last-child,
+#comments li:last-child,
+#results li:last-child,
+#edit-tracklist li:last-child,
+#your-collection li:last-child,
+#your-comments li:last-child {
+	border-bottom: 1px solid gray;
+}
+
+.comment-username {
+	color: #0078A6;
+}
+
+.block-header {
+	border-bottom: none;
+	padding: 10px;
+	margin: 0;
+	background-color: #303030;
+}
+
+.block {
+	border: 1px solid gray;
+	background-color: #B2B2B2;
+	padding: 10px;
+}
+
+#player-div {
+	margin: 28px 0 0 20px;
+	width: 180px;
+	background-color: #B2B2B2;
+}
+
+#current-play {
+	font-size: 0.8em;
+	padding: 10px;
+}
+
+audio {
+	width: 180px;
+	height: 27px;
+	margin: 0;
+}
+
+#player-items {
+	overflow: hidden;
+}
+
+/***********SEARCH PAGE************/
+
+.centre-head {
+	text-align: center;
+	margin: 40px;
+}
+
+#search {
+	width: 400px;
+	margin: 40px auto 0 auto;
+}
+
+#search h1 {
+	text-align: center;
+}
+
+#search p {
+	display: inline;
+	font-size: 1.2em;
+}
+
+#search-form {
+	text-align: center;
+}
+
+#search-box {
+	font-size: 16px;
+}
+
+#search-form button {
+	float: none;
+	margin: 10px;
+}
+
+#user-p {
+	margin-left: 76px;
+}
+
+#music-p {
+	margin-left: 158px;
+}
+
+.search-img {
+	margin: 25px;
+	opacity: 0.5;
+}
+
+.search-img-border {
+	border: 4px solid #00B7FF;
+	margin: 21px;
+	opacity: 1;
+}
+
+#results {
+	width: 600px;
+	margin: 0 auto;
+}
+
+#results-msg {
+	padding: 10px;
+	background-color: #595959;
+	color: #fff;
+	font-size: 1.2em;
+}
+
+#results-msg a {
+	margin-left: 20px;
+}
+
+/***********EDIT TRACK PAGE************/
+
+#edit-tracklist,
+#add-tracks {
+	width: 450px;
+}
+
+#edit-tracklist {
+	float: left;
+	clear: both;
+	margin: 40px 20px 0 0;
+}
+
+#add-tracks {
+	float: left;
+	margin: 40px 0 0 0;
+
+}
+
+#add-track-form {
+	padding: 20px 20px 40px 20px;
+	background-color: #B2B2B2;
+}
+
+#add-track-input {
+	width: 290px;
 }

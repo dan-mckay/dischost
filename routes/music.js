@@ -17,7 +17,7 @@ exports.addmusicitem = function(req, res, next) {
     var item = {
       _id: uuid.v1(),
       collection: "music",
-      user: req.session.user.username,
+      user_id: req.session.user._id,
       artist: req.body.artist,
       title: req.body.title,
       label: req.body.label,
@@ -34,11 +34,22 @@ exports.addmusicitem = function(req, res, next) {
         // handle error with status code
       }
       else {
-        res.render('success', { title: 'Dischost - Success' });
+        //item._rev = res.body.rev;
+        //res.send(item);
+        res.render('dash', { 
+          title: 'Dischost - Success',
+          user: req.session.user
+        });
       }
     });
   }
   else {
     console.log("Not a post request - error");
   }
+};
+
+// HOMEPAGE of a music release
+exports.musicpage = function(req, res) {
+  var music = res.body;
+  res.send(music)
 };

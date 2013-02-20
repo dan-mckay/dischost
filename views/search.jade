@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  script(src="/javascripts/search.js")
+  h1.centre-head Search
+  div#search
+    p#user-p Users
+    p#music-p Music
+    br
+    img#user-img.search-img(src="/images/avatar.png", alt="User", height="150px", width="150px")
+    img#music-img.search-img(src="/images/default.png", alt="Music", height="150px", width="150px")
+    form#search-form(method="POST", action="")
+      input#search-box(type="search", name="search-box", results="5")
+      br
+      button(class="submitbtn", role="button") Search
+      br
+  div#results
+    div#results-msg
+      p #{results.msg}
+        a(href='/search') Search again
+    ul#results-items
+      each result in results.resultlist
+        li 
+          p.comment-username #{result.name}
+          p 
+            a #{result.link} #{result.name}

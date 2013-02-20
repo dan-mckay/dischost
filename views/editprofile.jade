@@ -6,7 +6,7 @@ block content
     form(action="/edituser", method="POST")
       input(type="hidden", name="_method", value="put")
       label(for="username") Username:
-      input#username(type="text", name="username", value="#{user.username}")
+      input#username.std-input(type="text", name="username", value="#{user.username}")
       br
       label(for="email") Email:
       input#email(type="email", name="email", value="#{user.email}")
@@ -15,6 +15,7 @@ block content
       select#country(name="country", value="Please Select...")
         each country in countryList
           option(value="#{country}") #{country}
+      span.select-arrow
       br
       label(for="password") Password:
       input#password(type="password", name="password")

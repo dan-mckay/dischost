@@ -108,10 +108,48 @@ exports.userpage = function(req, res) {
     });
 };
 
-exports.dash = function(req, res) {
-  res.render('dash', { 
-    title: 'Dischost: ' + req.session.user.username + ' dash',
-    user: req.session.user 
+exports.dash = function(req, res, next) {
+  var music = [];
+  var comments = [];
+  var j = 0;
+  var k = 0;
+  req.body = req.session.user;
+  db.getUserDash(req, res, function(err) {
+    if(err) {
+        console.log("Error Getting User Dash");
+        //TODO
+        // handle error with status code
+    }
+    else {
+      var rows = res.body.rows;
+      if(rows.length > 1) {
+        for(var i = 0; i != rows.length; i ++) {
+          if(rows[i].value.collection == "music") {
+            music[j] = {
+              artist: rows[i].value.artist,
+              title: rows[i].value.title,
+              _id: rows[i].value._id
+            };
+            j++;
+          }
+          else if(rows[i].value.collection == "comments") {
+            comments[k] =  { 
+              artist: rows[i].value.artist,
+              title: rows[i].value.title,
+              content: rows[i].value.content,
+              music_id: rows[i].value .music_id
+            };
+            k++;
+          }
+        }
+      }
+      res.render('dash', { 
+        title: 'Dischost: ' + req.session.user.username + ' dash',
+        user: req.session.user,
+        music: music,
+        comments: comments
+      });
+    }
   });
 };
 

@@ -11,7 +11,6 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var music = require('./routes/music');
 
-
 var app = express();
 
 // Set up a place in memory to store the session data
@@ -46,12 +45,67 @@ app.get('/logout', user.logout);
 app.post('/loginuser', user.loginUser);
 app.get('/noauth', user.noAuth);
 app.get('/users/:username', user.userpage);
+//requiresLogin below here
 app.get('/dash', requiresLogin, user.dash);
 app.get('/editprofile',requiresLogin, user.editprofile);
 app.put('/edituser', requiresLogin, user.edituser);
 
 app.get('/addmusic', requiresLogin, music.addmusic);
 app.post('/addmusicitem', requiresLogin, music.addmusicitem);
+app.get('/music/:id', requiresLogin, music.musicpage);
+
+// WEBPAGE TEST STUFF
+app.get('/user/music', function(req, res) {
+  var item1 = { 
+        artist: "Kraftwerk",
+        title: "The Man Machine",
+        label: "EMI",
+        year: "1981",
+        format: "LP",
+        review: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt turpis, non lobortis nisl nunc blandit mauris. Fusce facilisis, felis aliquam sagittis eleifend, lacus elit ultrices mauris, nec commodo dolor orci a tellus. Maecenas sit amet elementum orci. Curabitur quam mi, ultrices volutpat ultrices eu, ornare eget nibh. In hac habitasse platea dictumst."
+      };
+  var comments = [
+        {username: "Daniel", comment: "I love this album!"},
+        {username: "Miriam", comment: "I can't stand it. I hate Kraftwerk"},
+        {username: "John", comment: "I haven't heard it."},
+        {username: "Roisin", comment: "Me neither."},
+        {username: "VerboseBore", comment: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt"}
+  ];
+  res.render('musicpage', { 
+    title: "blah",
+    item: item1,
+    comments: comments
+  });
+});
+
+app.get('/search', function(req, res) {
+  var results = {
+    msg: 'Not what you were looking for?',
+    resultlist: [
+      { name: 'Daniel', link: '/users/Daniel'}
+    ]
+  }
+  res.render('search', {
+    title: "Search",
+    results: results
+  });
+});
+
+app.get('/user/edittracks', function(req, res) {
+  var item1 = { 
+        artist: "Kraftwerk",
+        title: "The Man Machine",
+        label: "EMI",
+        year: "1981",
+        format: "LP",
+        review: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt turpis, non lobortis nisl nunc blandit mauris. Fusce facilisis, felis aliquam sagittis eleifend, lacus elit ultrices mauris, nec commodo dolor orci a tellus. Maecenas sit amet elementum orci. Curabitur quam mi, ultrices volutpat ultrices eu, ornare eget nibh. In hac habitasse platea dictumst."
+      };
+  res.render('edittracks', { 
+    title: "edit tracks",
+    item: item1
+  });
+});
+
 
 function requiresLogin(req, res, next) {
   if(req.session.user) {

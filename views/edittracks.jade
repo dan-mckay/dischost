@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  script(src="/javascripts/edittracks.js")
+  div#music
+    div#left-col
+      img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+    div#centre
+      div#music-details
+        h1.lge-head #{item.title}
+        h2 #{item.artist}
+        p Label: #{item.label}
+        p Year: #{item.year}
+        p Format: #{item.format}
+    div#edit-tracklist
+      h2#tracklist-header.block-header Tracklist
+      ul#tracklist-items
+        li Lorem ipsum dolor sit amet
+        li Consectetur adipiscing elit
+        li Aenean dapibus tempor elit, eu elementum purus varius
+        li Duis aliquam
+        li Integer metus dui, volutpat a posuere non
+        li Volutpat a posuere non
+        li Lorem ipsum dolor sit amet
+        li Consectetur adipiscing elit
+        li Aenean dapibus tempor elit, eu elementum purus varius
+        li Duis aliquam
+        li Integer metus dui, volutpat a posuere non
+        li Volutpat a posuere non
+    div#add-tracks
+      h2#tracklist-header.block-header Add Tracks
+      div#add-track-form
+        form(method="POST", action="/addtrack")
+          label#addtrack(for="addtrack") Title:
+          input#add-track-input.std-input(type="text", name="addtrack")
+          br
+          button(class="submitbtn", role="button") Add Track
+          br
+
+  
