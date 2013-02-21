@@ -35,7 +35,7 @@ exports.getMusicById = function(req, res, next) {
   var urlString = querystring.stringify({ 
     reduce: 'false', 
     startkey: '[' + id +']',
-    endkey:  '[' + id + ', 2]' 
+    endkey:  '[' + id + ', 2, {}]' 
   });
   var thisView = musicView + "musicpage?";
   console.log(host + db + thisView + urlString)
@@ -59,6 +59,26 @@ exports.getMusicById = function(req, res, next) {
 
 // CREATE NEW COMMENT
 exports.createcomment = function(req, res, next) {
+  var item = req.body;
+  // use the "request" module to build the request to database
+  request.put( {
+      url: host + db + item._id,
+      json: item
+    }, 
+    function (err, response, body) {
+      if(err) {
+        throw new Error(err);
+      }
+      if(response.statusCode == 201) {
+        console.log('Status Code: ' + response.statusCode);
+        res.body = response.body;
+        next();
+      } 
+    });
+};
+
+// CREATE NEW COMMENT
+exports.createitem = function(req, res, next) {
   var item = req.body;
   // use the "request" module to build the request to database
   request.put( {

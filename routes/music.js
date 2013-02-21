@@ -97,7 +97,7 @@ exports.addcomment = function(req, res, next) {
       username: req.session.user.username
     };
     req.body = item;
-    // Put user into database
+    // Put comment into database
     db.createcomment(req, res, function(err) {
       if(err) {
         console.log("Error Saving Data");
@@ -130,11 +130,40 @@ exports.edittracks = function(req, res, next) {
         var tracks = rows[2];
         res.render('edittracks', { 
           title: 'Edit Tracks: ' + music.artist + ' - ' + music.title,
-          item: music
+          item: music,
+          tracklist: tracks
         });
       }
     }
   });
+};
+
+// Take form data and pass to database for new comment
+exports.addtrack = function(req, res, next) {
+  if(req.method == "POST") {
+    var item = {
+      _id: uuid.v1(),
+      collection: "tracks",
+      music_id: req.body.music_id,
+      title: req.body.title,
+      number: req.body.number
+    };
+    req.body = item;
+    // Put user into database
+    db.createitem(req, res, function(err) {
+      if(err) {
+        console.log("Error Saving Data");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        res.redirect('/edittracks/' + item.music_id);
+      }
+    });
+  }
+  else {
+    console.log("Not a post request - error");
+  }
 };
 
 // Loop through the rows returned by db query and split them

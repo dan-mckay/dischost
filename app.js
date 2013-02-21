@@ -55,6 +55,7 @@ app.post('/addmusicitem', requiresLogin, music.addmusicitem);
 app.get('/music/:id', requiresLogin, music.musicpage);
 app.post('/addcomment', requiresLogin, music.addcomment);
 app.get('/edittracks/:id', requiresLogin, music.edittracks);
+app.post('/addtrack', requiresLogin, music.addtrack);
 
 // WEBPAGE TEST STUFF
 app.get('/user/music', function(req, res) {

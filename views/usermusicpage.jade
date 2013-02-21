@@ -40,9 +40,13 @@ block content
       div#tracklist
         h2#tracklist-header.block-header Tracklist
           img#tracklist-arrow.arrow(src="/images/arr-down.png")
-        each track in tracklist
-          ul#tracklist-items
-              li #{track.number}: #{track.title}
+        ul#tracklist-items
+          case tracklist.length
+            when 0
+              li No tracks have been added
+            default
+              each track in tracklist
+                li #{track.number}: #{track.title}
       div#comments
         h2#comments-header.block-header Comments
           img#comments-arrow.arrow(src="/images/arr-down.png")

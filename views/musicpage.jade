@@ -39,18 +39,12 @@ block content
         h2#tracklist-header.block-header Tracklist
           img#tracklist-arrow.arrow(src="/images/arr-down.png")
         ul#tracklist-items
-          li Lorem ipsum dolor sit amet
-          li Consectetur adipiscing elit
-          li Aenean dapibus tempor elit, eu elementum purus varius
-          li Duis aliquam
-          li Integer metus dui, volutpat a posuere non
-          li Volutpat a posuere non
-          li Lorem ipsum dolor sit amet
-          li Consectetur adipiscing elit
-          li Aenean dapibus tempor elit, eu elementum purus varius
-          li Duis aliquam
-          li Integer metus dui, volutpat a posuere non
-          li Volutpat a posuere non
+          case tracklist.length
+            when 0
+              li No tracks have been added
+            default
+              each track in tracklist
+                li #{track.number}: #{track.title}
       div#comments
         h2#comments-header.block-header Comments
           img#comments-arrow.arrow(src="/images/arr-down.png")
