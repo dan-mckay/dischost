@@ -35,22 +35,14 @@ block content
           span.bold #{item.year}
         p.details Format: 
           span.bold #{item.format}
+        a.details-link(href='/editmusic/' + item._id) Edit Details
+        a.details-link(href='/edittracks/' + item._id) Edit Tracks
       div#tracklist
         h2#tracklist-header.block-header Tracklist
           img#tracklist-arrow.arrow(src="/images/arr-down.png")
-        ul#tracklist-items
-          li Lorem ipsum dolor sit amet
-          li Consectetur adipiscing elit
-          li Aenean dapibus tempor elit, eu elementum purus varius
-          li Duis aliquam
-          li Integer metus dui, volutpat a posuere non
-          li Volutpat a posuere non
-          li Lorem ipsum dolor sit amet
-          li Consectetur adipiscing elit
-          li Aenean dapibus tempor elit, eu elementum purus varius
-          li Duis aliquam
-          li Integer metus dui, volutpat a posuere non
-          li Volutpat a posuere non
+        each track in tracklist
+          ul#tracklist-items
+              li #{track.number}: #{track.title}
       div#comments
         h2#comments-header.block-header Comments
           img#comments-arrow.arrow(src="/images/arr-down.png")

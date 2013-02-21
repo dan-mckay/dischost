@@ -34,6 +34,7 @@ exports.getUserByName = function(req, res, next) {
   var urlString = querystring.stringify({ reduce: 'false', key: name });
   var thisView = userView + "find?";
   // Make request to couchDB, callback function handles result
+  console.log(host + db + thisView + urlString)
   request.get( {
     url: host + db + thisView + urlString,
   }, 

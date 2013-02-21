@@ -24,7 +24,7 @@ h3 {
 }
 
 a {
-  color: #00B7FF;
+  color: #0078A6;
 }
 
 .bold {
@@ -33,6 +33,12 @@ a {
 
 .lge-head {
 	font-size: 3em;
+	margin: 0 0 12px 0;
+}
+
+.dark {
+	color: #212121;
+	margin-bottom: 4px;
 }
 
 /***********GENERIC************/
@@ -429,7 +435,10 @@ nav a:hover {
 	line-height: 1.4em;
 }
 
-#tracklist, 
+#tracklist {
+	margin: 45px 0 0 0;
+} 
+
 #edit-tracklist {
 	margin: 80px 0 0 0;
 }
@@ -461,7 +470,7 @@ nav a:hover {
 }
 
 .comment-username {
-	color: #0078A6;
+	color: #212121;
 }
 
 .block-header {
@@ -496,6 +505,31 @@ audio {
 
 #player-items {
 	overflow: hidden;
+}
+
+#add-comment {
+	width: 320px;
+	margin: 0 0 0 40px;
+}
+
+#add-comment-form {
+	padding: 10px;
+	border: 1px solid gray;
+	border-bottom: none;
+	background-color: #B2B2B2;
+	overflow: hidden;
+}
+
+#add-comment-form button {
+	margin: 10px 0 0 0;
+}
+
+.details {
+	margin-bottom: 9px;
+}
+
+.details-link {
+	margin-right: 9px;
 }
 
 /***********SEARCH PAGE************/

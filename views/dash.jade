@@ -21,9 +21,8 @@ block content
         ul#collection-items
         each item in music
           li
-            p #{item.artist}
-            p #{item.title}
-            p #{item._id}
+            p #{item.artist} - 
+              a(href="/music/#{item._id}") #{item.title}
     div#right-side
       h2#your-com-header.block-header Your Comments
         img#your-com-arrow.arrow(src="/images/arr-down.png")
@@ -31,6 +30,5 @@ block content
         ul#comments-items
         each comment in comments
           li
-            p #{comment.artist}
-            p #{comment.title}
+            p.dark #{comment.artist} - #{comment.title}
             p #{comment.content}

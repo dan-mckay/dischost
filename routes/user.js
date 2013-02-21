@@ -109,11 +109,12 @@ exports.userpage = function(req, res) {
 };
 
 exports.dash = function(req, res, next) {
-  var music = [];
-  var comments = [];
-  var j = 0;
+  var music = [];     // Array to store user's collection of music
+  var comments = [];  // Array to store user's comments
+  var j = 0;          // Counter variable for loop
   var k = 0;
-  req.body = req.session.user;
+  // Set the user to be request body and query the database
+  req.body = req.session.user;    
   db.getUserDash(req, res, function(err) {
     if(err) {
         console.log("Error Getting User Dash");
@@ -123,6 +124,8 @@ exports.dash = function(req, res, next) {
     else {
       var rows = res.body.rows;
       if(rows.length > 1) {
+        // rows[0] is the user document, so if more than that is returned
+        // loop through adding the data to their respective array
         for(var i = 0; i != rows.length; i ++) {
           if(rows[i].value.collection == "music") {
             music[j] = {
@@ -143,6 +146,7 @@ exports.dash = function(req, res, next) {
           }
         }
       }
+      // render user dash page with data
       res.render('dash', { 
         title: 'Dischost: ' + req.session.user.username + ' dash',
         user: req.session.user,
