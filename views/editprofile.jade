@@ -36,4 +36,7 @@ block content
       li Make sure your passwords match
   div#upload-av
     img(src='/images/avatar.png', alt='User Avatar', width='200px', height='200px')
-    p Drag an image from your file system onto the image above to update your avatar
+    form(method="POST", enctype="multipart/form-data", action="/uploadavatar")
+      input(type="file", name="avatar")
+      br
+      button(class="submitbtn", role="button") Upload

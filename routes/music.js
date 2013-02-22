@@ -27,7 +27,7 @@ exports.addmusicitem = function(req, res, next) {
     };
     req.body = item;
     // Put user into database
-    db.createmusicitem(req, res, function(err) {
+    db.createitem(req, res, function(err) {
       if(err) {
         console.log("Error Saving Data");
         //TODO
@@ -98,7 +98,7 @@ exports.addcomment = function(req, res, next) {
     };
     req.body = item;
     // Put comment into database
-    db.createcomment(req, res, function(err) {
+    db.createitem(req, res, function(err) {
       if(err) {
         console.log("Error Saving Data");
         //TODO

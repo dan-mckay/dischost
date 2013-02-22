@@ -22,7 +22,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
+  app.use(express.bodyParser({ keepExtensions: true }));
   app.use(express.cookieParser());
   app.use(express.session({secret: 'ThisStringIsSecret', store: MemStore({
     reapInterval: 60000 * 10
@@ -49,6 +49,7 @@ app.get('/users/:username', user.userpage);
 app.get('/dash', requiresLogin, user.dash);
 app.get('/editprofile',requiresLogin, user.editprofile);
 app.put('/edituser', requiresLogin, user.edituser);
+app.post('/uploadavatar', requiresLogin, user.uploadavatar)
 
 app.get('/addmusic', requiresLogin, music.addmusic);
 app.post('/addmusicitem', requiresLogin, music.addmusicitem);

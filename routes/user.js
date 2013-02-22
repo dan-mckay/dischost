@@ -2,6 +2,7 @@
  * USER ROUTES - all the routing and app logic for a user
  */
 var uuid = require('node-uuid');
+var fs = require('fs');
 var db = require('../models/user.js');
 var countries = require('../data/countries.js');
 
@@ -123,6 +124,7 @@ exports.dash = function(req, res, next) {
     }
     else {
       var rows = res.body.rows;
+      req.session.user = rows[0].value;
       if(rows.length > 1) {
         // rows[0] is the user document, so if more than that is returned
         // loop through adding the data to their respective array
@@ -195,4 +197,44 @@ exports.edituser = function(req, res, next) {
     else {
       console.log("Not a put request - error");
     }
+};
+
+exports.uploadavatar = function(req, res, next) {
+  var upload = req.files.avatar;
+  // If the file is not an image of these common types
+  if(upload.mime != "image/jpeg" && upload.mime != "image/png" && upload.mime != "image/gif") {
+    res.send(415);      // Unsupported Media Type HTTP error code
+  }
+  // If image size > 5MB (5242880 bytes)
+  else if(upload.size > 5242880) {
+    res.send(413);    // Request Entity Too Large HTTP error code
+  }
+  else {
+    //req.session.user._rev = res.body.rev;
+    var avatar = encodeURIComponent(upload.name);
+    req.session.user.avatar = avatar;
+    req.body = req.session.user;
+    db.editUserDetails(req, res, function(err) {
+      if(err) {
+        console.log("Error Uploading Image");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        req.session.user._rev = res.body.rev;
+        req.body = req.session.user;
+        db.uploadImage(req, res, function(err) {
+          if(err) {
+            console.log("Error Uploading Image");
+            //TODO
+            // handle error with status code
+          }
+          else {
+            req.session.user._rev = res.body.rev;
+            res.redirect('dash');
+          }
+        });
+      }
+    });
+  }
 };

@@ -3,7 +3,10 @@ extends layout
 block content
   script(src="/javascripts/dash.js")
   div#user
-    img.avatar(src='/images/avatar.png', alt='User Avatar', width='200px', height='200px')
+    if(user.avatar)
+      img.avatar(src='https://everton.iriscouch.com/dischost/#{user._id}/#{user.avatar}', alt='User Avatar', width='200px', height='200px')
+    else
+      img.avatar(src='/images/avatar.png', alt='User Avatar', width='200px', height='200px')
     div#user-details
       h1.lge-head #{user.username}
       h2 Country: #{user.country}

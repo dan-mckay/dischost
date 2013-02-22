@@ -3,8 +3,9 @@
  */
 var querystring = require('querystring');
 var request = require('request');
+var fs = require('fs');
 
-var host = "http://127.0.0.1:5984/";
+var host = "https://everton.iriscouch.com/";
 var db = "dischost/";
 var userView = "_design/user/_view/";
 
@@ -92,8 +93,38 @@ exports.editUserDetails = function(req, res, next) {
       if(response.statusCode == 201) {
         console.log('Status Code: ' + response.statusCode);
         res.body = response.body;
-        //console.log(body + '\n\n');
         next();
       } 
     });
 };
+
+exports.uploadImage = function(req, res, next) {
+  var upload = req.files.avatar;
+  var user = req.body;
+  var name = encodeURIComponent(upload.name);
+  var destPath = host + db + user._id + '/' + name + '?rev=' + user._rev;
+  fs.readFile(upload.path, function(error, data) {
+    if(error) {
+      throw new Error(error);
+    }
+    request.put( {
+      uri: destPath,
+      headers: {
+        "Content-Type": upload.mime,
+        "Content-Length": upload.length
+      },
+      body: data
+    }, 
+    function (err, response, body) {
+      if(err) {
+        throw new Error(err);
+      }
+      if(response.statusCode == 201) {
+        console.log('Status Code: ' + response.statusCode);
+        res.body = JSON.parse(response.body);
+        next();
+      } 
+    });
+  });
+};
+
