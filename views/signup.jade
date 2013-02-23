@@ -2,7 +2,7 @@ extends layout
 
 block content
   div#signupform
-    h1 Sign up for Dischost
+    h1 Sign up
     form(action="/newuser", method="POST")
       label(for="username") Username:
       input#username.std-input(type="text", name="username")
@@ -33,5 +33,5 @@ block content
       li Enter a valid password
       li Make sure your passwords match
   div#records
-    img(src='/images/logo-lg-grey.png', alt='Records')
+    img(src='/images/records.png', alt='Dischost Logo')
       

@@ -210,7 +210,7 @@ exports.uploadavatar = function(req, res, next) {
     res.send(413);    // Request Entity Too Large HTTP error code
   }
   else {
-    //req.session.user._rev = res.body.rev;
+    // Update user in db, adding the filename as avatar
     var avatar = encodeURIComponent(upload.name);
     req.session.user.avatar = avatar;
     req.body = req.session.user;
@@ -221,6 +221,7 @@ exports.uploadavatar = function(req, res, next) {
         // handle error with status code
       }
       else {
+        // Update revision number and upload image to database
         req.session.user._rev = res.body.rev;
         req.body = req.session.user;
         db.uploadImage(req, res, function(err) {

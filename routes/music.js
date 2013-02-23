@@ -45,6 +45,37 @@ exports.addmusicitem = function(req, res, next) {
   }
 };
 
+// EDIT music release
+exports.editmusic = function(req, res, next) {
+  var id = req.params.id;
+  req.body.id = id;
+  db.getMusicById(req, res, function(err) {
+    if(err) {
+      console.log("Error Getting Data");
+      //TODO
+      // handle error with status code
+    }
+    else {
+      if(res.body.rows.length > 0) {
+        var rows = splitMusicData(res.body.rows);
+        var music = rows[0];
+        // Save the current music item to the session
+        req.session.music = music;
+        // If the current user is the owner of the music, show them their version of the page
+        if(music.user_id === req.session.user._id) {
+          res.render('editmusic', { 
+            title: 'Dischost: ' + music.artist + ' - ' + music.title,
+            item: music
+          });
+        }
+        else {
+          res.send(401);  // No authorisation - the music belongs to someone else
+        }
+      }
+    }
+  });
+};
+
 // HOMEPAGE of a music release
 exports.musicpage = function(req, res, next) {
   var id = req.params.id;
@@ -163,6 +194,47 @@ exports.addtrack = function(req, res, next) {
   }
   else {
     console.log("Not a post request - error");
+  }
+};
+
+exports.uploadartwork = function(req, res, next) {
+  var upload = req.files.artwork;
+  // If the file is not an image of these common types
+  if(upload.mime != "image/jpeg" && upload.mime != "image/png" && upload.mime != "image/gif") {
+    res.send(415);      // Unsupported Media Type HTTP error code
+  }
+  // If image size > 5MB (5242880 bytes)
+  else if(upload.size > 5242880) {
+    res.send(413);    // Request Entity Too Large HTTP error code
+  }
+  else {
+    // Update music in db, adding the filename as avatar
+    var artwork = encodeURIComponent(upload.name);
+    req.session.music.artwork = artwork;
+    req.body = req.session.music;
+    db.editMusicDetails(req, res, function(err) {
+      if(err) {
+        console.log("Error Uploading Image");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        // Update revision number and upload image to database
+        req.session.music._rev = res.body.rev;
+        req.body = req.session.music;
+        db.uploadImage(req, res, function(err) {
+          if(err) {
+            console.log("Error Uploading Image");
+            //TODO
+            // handle error with status code
+          }
+          else {
+            req.session.music._rev = res.body.rev;
+            res.redirect('/music/' + req.session.music._id);
+          }
+        });
+      }
+    });
   }
 };
 

@@ -4,7 +4,10 @@ block content
   script(src="/javascripts/musicpage.js")
   div#music
     div#left-col
-      img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+      - if(item.artwork)
+        img(src='https://everton.iriscouch.com/dischost/#{item._id}/#{item.artwork}', alt='Music Artwork', width='200px', height='200px')
+      - else
+        img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
       div#review-div
         h2#review-header.block-header Review
           img#review-arrow.arrow(src="/images/arr-down.png")

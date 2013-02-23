@@ -49,14 +49,16 @@ app.get('/users/:username', user.userpage);
 app.get('/dash', requiresLogin, user.dash);
 app.get('/editprofile',requiresLogin, user.editprofile);
 app.put('/edituser', requiresLogin, user.edituser);
-app.post('/uploadavatar', requiresLogin, user.uploadavatar)
+app.post('/uploadavatar', requiresLogin, user.uploadavatar);
 
 app.get('/addmusic', requiresLogin, music.addmusic);
 app.post('/addmusicitem', requiresLogin, music.addmusicitem);
 app.get('/music/:id', requiresLogin, music.musicpage);
 app.post('/addcomment', requiresLogin, music.addcomment);
 app.get('/edittracks/:id', requiresLogin, music.edittracks);
+app.get('/editmusic/:id', requiresLogin, music.editmusic);
 app.post('/addtrack', requiresLogin, music.addtrack);
+app.post('/uploadartwork', requiresLogin, music.uploadartwork);
 
 // WEBPAGE TEST STUFF
 app.get('/user/music', function(req, res) {
