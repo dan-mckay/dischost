@@ -159,8 +159,13 @@ exports.edittracks = function(req, res, next) {
         var rows = splitMusicData(res.body.rows);
         var music = rows[0];
         var tracks = rows[2];
+
+        //Set upload progress to session user
+        progress[req.session.user._id] = 0;
+
         res.render('edittracks', { 
           title: 'Edit Tracks: ' + music.artist + ' - ' + music.title,
+          user: req.session.user,
           item: music,
           tracklist: tracks
         });
@@ -177,7 +182,7 @@ exports.addtrack = function(req, res, next) {
       collection: "tracks",
       music_id: req.body.music_id,
       title: req.body.title,
-      number: req.body.number
+      number: parseInt(req.body.number)
     };
     req.body = item;
     // Put user into database
@@ -229,10 +234,29 @@ exports.uploadartwork = function(req, res, next) {
             // handle error with status code
           }
           else {
-            req.session.music._rev = res.body.rev;
             res.redirect('/music/' + req.session.music._id);
           }
         });
+      }
+    });
+  }
+};
+
+exports.uploadtrack = function(req, res, next) {
+  var upload = req.files.track;
+  // If the file is not an mp3
+  if(upload.mime != "audio/mp3") {
+    res.send(415);      // Unsupported Media Type HTTP error code
+  }
+  else {
+    db.uploadMp3(req, res, function(err) {
+      if(err) {
+        console.log("Error Uploading mp3");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        res.redirect('/edittracks/' + req.body.music_id);
       }
     });
   }

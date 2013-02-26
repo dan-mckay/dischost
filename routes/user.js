@@ -231,7 +231,6 @@ exports.uploadavatar = function(req, res, next) {
             // handle error with status code
           }
           else {
-            req.session.user._rev = res.body.rev;
             res.redirect('dash');
           }
         });

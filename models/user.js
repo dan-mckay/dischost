@@ -103,28 +103,19 @@ exports.uploadImage = function(req, res, next) {
   var user = req.body;
   var name = encodeURIComponent(upload.name);
   var destPath = host + db + user._id + '/' + name + '?rev=' + user._rev;
-  fs.readFile(upload.path, function(error, data) {
-    if(error) {
-      throw new Error(error);
-    }
-    request.put( {
-      uri: destPath,
-      headers: {
-        "Content-Type": upload.mime,
-        "Content-Length": upload.length
-      },
-      body: data
-    }, 
-    function (err, response, body) {
-      if(err) {
-        throw new Error(err);
-      }
-      if(response.statusCode == 201) {
-        console.log('Status Code: ' + response.statusCode);
-        res.body = JSON.parse(response.body);
-        next();
-      } 
-    });
+  var requestStream = request.put(destPath);
+
+  requestStream.on('response', function(response) {
+    if(response.statusCode == 201) {
+      console.log('Status Code: ' + response.statusCode);
+      next();
+    } 
   });
+
+  requestStream.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  fs.createReadStream(upload.path).pipe(requestStream);
 };
 

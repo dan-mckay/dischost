@@ -5,6 +5,7 @@ var querystring = require('querystring');
 var request = require('request');
 var fs = require('fs');
 
+
 var host = "https://everton.iriscouch.com/";
 var db = "dischost/";
 var musicView = "_design/music/_view/";
@@ -83,27 +84,53 @@ exports.uploadImage = function(req, res, next) {
   var music = req.body;
   var name = encodeURIComponent(upload.name);
   var destPath = host + db + music._id + '/' + name + '?rev=' + music._rev;
-  fs.readFile(upload.path, function(error, data) {
-    if(error) {
-      throw new Error(error);
-    }
-    request.put( {
-      uri: destPath,
-      headers: {
-        "Content-Type": upload.mime,
-        "Content-Length": upload.length
-      },
-      body: data
-    }, 
-    function (err, response, body) {
-      if(err) {
-        throw new Error(err);
-      }
-      if(response.statusCode == 201) {
-        console.log('Status Code: ' + response.statusCode);
-        res.body = JSON.parse(response.body);
-        next();
-      } 
-    });
+  var requestStream = request.put(destPath);
+
+  requestStream.on('response', function(response) {
+    if(response.statusCode == 201) {
+      console.log('Status Code: ' + response.statusCode);
+      next();
+    } 
   });
+
+  requestStream.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  fs.createReadStream(upload.path).pipe(requestStream);
+};
+
+exports.uploadMp3 = function(req, res, next) {
+  var upload = req.files.track;
+  var destPath = host + db + req.body.track_id + '/track.mp3?rev=' + req.body.rev;
+  console.log(destPath)
+  var readStream = fs.createReadStream(upload.path);
+  var requestStream = request.put(destPath);
+
+  var sum = 0;
+  var percent = 0;
+  var id = req.session.user._id;
+
+  readStream.on('data', function(chunk) {
+    sum = sum + chunk.length;
+    percent = Math.round(sum / upload.size * 100);
+    // Emit the percentage through socket.io
+    //io.emit('uploadProgress', percent);
+    progress[req.session.user._id] = percent;
+    console.log(progress);
+  })
+
+  requestStream.on('response', function(response) {
+    if(response.statusCode == 201) {
+      console.log('Status Code: ' + response.statusCode);
+      progress[req.session.user._id] = 0;   // reset progress value for this user
+      next();
+    } 
+  });
+
+  requestStream.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  readStream.pipe(requestStream);
 };

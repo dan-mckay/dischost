@@ -6,12 +6,16 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var io = require('socket.io');
 // Import routes for application
 var routes = require('./routes');
 var user = require('./routes/user');
 var music = require('./routes/music');
 
 var app = express();
+
+//global variable for upload progress
+progress = {};
 
 // Set up a place in memory to store the session data
 var MemStore = express.session.MemoryStore;
@@ -34,6 +38,25 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+});
+
+var server = http.createServer(app);
+io = io.listen(server);
+
+// Stops socket.io from dealing with requests from other domains
+io.configure(function () {
+  io.set('authorization', function (handshakeData, callback) {
+    if (handshakeData.xdomain) {
+    callback('Cross-domain connections are not allowed');
+    }
+    else {
+    callback(null, true);
+    }
+  });
+});
+
+server.listen(app.get('port'), function () {
+  console.log("Express server listening on port " + app.get('port'));
 });
 
 app.get('/', routes.index);
@@ -59,6 +82,7 @@ app.get('/edittracks/:id', requiresLogin, music.edittracks);
 app.get('/editmusic/:id', requiresLogin, music.editmusic);
 app.post('/addtrack', requiresLogin, music.addtrack);
 app.post('/uploadartwork', requiresLogin, music.uploadartwork);
+app.post('/uploadtrack', requiresLogin, music.uploadtrack);
 
 // WEBPAGE TEST STUFF
 app.get('/user/music', function(req, res) {
@@ -123,6 +147,21 @@ function requiresLogin(req, res, next) {
   }
 };
 
-http.createServer(app).listen(app.get('port'), function(){
+/*http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+});*/
+
+io.sockets.on('connection', function(socket) {
+  
+  socket.on('id', function(id) {
+    socket._id = id;
+  });
+
+  socket.on('uploadProgress', function() {
+    socket.emit('progress', progress[socket._id]);
+  });
+
+  socket.on('disconnect', function() {
+    console.log('socket disconnected');
+  });
 });

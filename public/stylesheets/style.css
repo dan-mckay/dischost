@@ -629,3 +629,7 @@ audio {
 #add-track-input {
 	width: 290px;
 }
+
+#progbar {
+	display: none;
+};

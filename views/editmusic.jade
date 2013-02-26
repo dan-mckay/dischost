@@ -37,7 +37,10 @@ block content
       li Enter a valid password
       li Make sure your passwords match
   div#upload-art
-    img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+    if(item.artwork)
+      img.avatar(src='https://everton.iriscouch.com/dischost/#{item._id}/#{item.artwork}', alt='Artwork', width='200px', height='200px')
+    else
+      img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
     form(method="POST", enctype="multipart/form-data", action="/uploadartwork")
       input(type="file", name="artwork")
       br

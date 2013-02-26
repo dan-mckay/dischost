@@ -2,9 +2,24 @@ extends layout
 
 block content
   script(src="/javascripts/edittracks.js")
+  script(src='/socket.io/socket.io.js')
+  script
+    var socket = io.connect('http://192.168.1.137:3000');
+    socket.on('connect', function() {
+      socket.emit('id', "#{user._id}");
+      socket.emit('uploadProgress');
+    });
+    socket.on('progress', function(progress) {
+      $('#progbar').val(progress);
+      console.log(progress);
+      socket.emit('uploadProgress');
+    });
   div#music
     div#left-col
-      img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
+      - if(item.artwork)
+        img(src='https://everton.iriscouch.com/dischost/#{item._id}/#{item.artwork}', alt='Music Artwork', width='200px', height='200px')
+      - else
+        img(src='/images/default.png', alt='Music Artwork', width='200px', height='200px')
     div#centre
       div#music-details
         h1.lge-head #{item.title}
@@ -17,6 +32,14 @@ block content
       each track in tracklist
           ul#tracklist-items
               li #{track.number}: #{track.title}
+                - if(!track._attachments)
+                  form#uploadform(method="POST", enctype="multipart/form-data", action="/uploadtrack")
+                    input(type="hidden", name="track_id", value="#{track._id}")
+                    input(type="hidden", name="rev", value="#{track._rev}")
+                    input(type="hidden", name="music_id", value="#{item._id}")
+                    input.track-upload(type="file", name="track")
+                    button#uploadbutton(class="submitbtn", role="button") Upload
+                  progress#progbar(max="100", value="0")
     div#add-tracks
       h2#tracklist-header.block-header Add Tracks
       div#add-track-form
