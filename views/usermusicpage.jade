@@ -50,6 +50,8 @@ block content
             default
               each track in tracklist
                 li #{track.number}: #{track.title}
+                  - if(track._attachments)
+                    img(id='playtrack-#{track._id}', data-id='#{track._id}', data-name='#{track.title}', class='play-btn', src='/images/play.png')
       div#comments
         h2#comments-header.block-header Comments
           img#comments-arrow.arrow(src="/images/arr-down.png")

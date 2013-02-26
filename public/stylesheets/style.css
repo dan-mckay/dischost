@@ -533,6 +533,12 @@ audio {
 	color: #0078A6;
 }
 
+.play-btn {
+	float: right;
+	margin-bottom: 1px;
+	cursor: pointer;
+}
+
 /***********SEARCH PAGE************/
 
 .centre-head {

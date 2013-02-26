@@ -18,6 +18,19 @@ $(document).ready(function() {
   $('#comments-arrow').click(function() {
     toggleContent($('#comments-arrow'), $('#comments-items'));
   });
+
+  //Mouseover effect for play buttons
+  $("img[id^='playtrack-']").mouseover(function() {
+    $(this).attr('src', '/images/play-white.png');
+  }).mouseout(function() {
+    $(this).attr('src', '/images/play.png');
+  }).click(function() {
+    var source = 'https://everton.iriscouch.com/dischost/' + $(this).data("id") + '/track.mp3';
+    $('#current-play').text($(this).data("name"));
+    $('#player').attr('src', source).get(0).play();
+  });
+
+
 });
 
 function toggleContent(arrow, content) {
