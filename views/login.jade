@@ -1,8 +1,8 @@
-extends layout
+extends layoutlogout
 
 block content
   div#login
-    h1 Login to DISCHOST
+    h1 Login
     form(action="/loginuser", method="POST")
       label(for="username") Username:
       input#username.std-input(type="text", name="username")

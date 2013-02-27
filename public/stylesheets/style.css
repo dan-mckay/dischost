@@ -539,7 +539,7 @@ audio {
 	cursor: pointer;
 }
 
-/***********SEARCH PAGE************/
+/***********SEARCH PAGES************/
 
 .centre-head {
 	text-align: center;
@@ -578,7 +578,7 @@ audio {
 }
 
 #music-p {
-	margin-left: 158px;
+	margin-left: 137px;
 }
 
 .search-img {
@@ -594,7 +594,7 @@ audio {
 
 #results {
 	width: 600px;
-	margin: 0 auto;
+	margin: 40px auto 0 auto;
 }
 
 #results-msg {
@@ -606,6 +606,16 @@ audio {
 
 #results-msg a {
 	margin-left: 20px;
+}
+
+.avatar-sml {
+	float: left;
+	margin: 0 20px 10px 0;
+}
+
+.result-link {
+	font-size: 1.2em;
+	margin-bottom: 4px;
 }
 
 /***********EDIT TRACK PAGE************/

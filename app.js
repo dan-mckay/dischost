@@ -11,6 +11,7 @@ var io = require('socket.io');
 var routes = require('./routes');
 var user = require('./routes/user');
 var music = require('./routes/music');
+var search = require('./routes/search');
 
 var app = express();
 
@@ -67,22 +68,27 @@ app.get('/login', user.login);
 app.get('/logout', user.logout);
 app.post('/loginuser', user.loginUser);
 app.get('/noauth', user.noAuth);
-app.get('/users/:username', user.userpage);
+
 //requiresLogin below here
 app.get('/dash', requiresLogin, user.dash);
 app.get('/editprofile',requiresLogin, user.editprofile);
 app.put('/edituser', requiresLogin, user.edituser);
 app.post('/uploadavatar', requiresLogin, user.uploadavatar);
+app.get('/users/:username', requiresLogin, user.userpage);
 
 app.get('/addmusic', requiresLogin, music.addmusic);
 app.post('/addmusicitem', requiresLogin, music.addmusicitem);
-app.get('/music/:id', requiresLogin, music.musicpage);
 app.post('/addcomment', requiresLogin, music.addcomment);
 app.get('/edittracks/:id', requiresLogin, music.edittracks);
 app.get('/editmusic/:id', requiresLogin, music.editmusic);
 app.post('/addtrack', requiresLogin, music.addtrack);
 app.post('/uploadartwork', requiresLogin, music.uploadartwork);
 app.post('/uploadtrack', requiresLogin, music.uploadtrack);
+app.get('/music/:id', requiresLogin, music.musicpage);
+
+app.get('/search', requiresLogin, search.searchpage);
+app.post('/search/user', requiresLogin, search.usersearch);
+app.post('/search/music', requiresLogin, search.musicsearch);
 
 // WEBPAGE TEST STUFF
 app.get('/user/music', function(req, res) {
@@ -108,14 +114,14 @@ app.get('/user/music', function(req, res) {
   });
 });
 
-app.get('/search', function(req, res) {
+app.get('/results', function(req, res) {
   var results = {
     msg: 'Not what you were looking for?',
     resultlist: [
       { name: 'Daniel', link: '/users/Daniel'}
     ]
   }
-  res.render('search', {
+  res.render('results', {
     title: "Search",
     results: results
   });

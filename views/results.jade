@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  div#results
+    div#results-msg
+      p #{results.message}
+        a(href='/search') Search again
+    ul#results-items
+      each result in results.rows
+        li 
+          if(result.value.collection == "user")
+            if(result.value.avatar)
+              img.avatar-sml(src='https://everton.iriscouch.com/dischost/#{result.value._id}/#{result.value.avatar}', alt='User Avatar', width='40px', height='40px')
+            else
+              img.avatar-sml(src='/images/avatar.png', alt='User Avatar', width='40px', height='40px')
+            p.result-link 
+              a(href="/users/#{result.value.username}") #{result.value.username}
+            p #{result.value.country}
+          if(result.value.collection == "music")
+            if(result.value.artwork)
+              img.avatar-sml(src='https://everton.iriscouch.com/dischost/#{result.value._id}/#{result.value.artwork}', alt='User Avatar', width='40px', height='40px')
+            else
+              img.avatar-sml(src='/images/default.png', alt='Music Artwork', width='40px', height='40px')
+            p.result-link 
+              a(href="/music/#{result.value._id}") #{result.value.title}
+            p #{result.value.artist}
