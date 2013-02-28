@@ -37,7 +37,7 @@ exports.getMusicById = function(req, res, next) {
   var urlString = querystring.stringify({ 
     reduce: 'false', 
     startkey: '[' + id +']',
-    endkey:  '[' + id + ', 2, {}]' 
+    endkey:  '[' + id + ', 3, {}]' 
   });
   var thisView = musicView + "musicpage?";
   console.log(host + db + thisView + urlString)
@@ -103,27 +103,23 @@ exports.uploadImage = function(req, res, next) {
 exports.uploadMp3 = function(req, res, next) {
   var upload = req.files.track;
   var destPath = host + db + req.body.track_id + '/track.mp3?rev=' + req.body.rev;
-  console.log(destPath)
   var readStream = fs.createReadStream(upload.path);
   var requestStream = request.put(destPath);
 
   var sum = 0;
   var percent = 0;
-  var id = req.session.user._id;
 
   readStream.on('data', function(chunk) {
     sum = sum + chunk.length;
     percent = Math.round(sum / upload.size * 100);
-    // Emit the percentage through socket.io
-    //io.emit('uploadProgress', percent);
+    // Set the value of progress to send through the socket in app.js
     progress[req.session.user._id] = percent;
-    console.log(progress);
   })
 
   requestStream.on('response', function(response) {
     if(response.statusCode == 201) {
       console.log('Status Code: ' + response.statusCode);
-      progress[req.session.user._id] = 0;   // reset progress value for this user
+      console.log(response);
       next();
     } 
   });

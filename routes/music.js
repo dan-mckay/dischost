@@ -29,14 +29,23 @@ exports.addmusicitem = function(req, res, next) {
     // Put user into database
     db.createitem(req, res, function(err) {
       if(err) {
-        console.log("Error Saving Data");
+        console.log("Error Saving Music");
         //TODO
         // handle error with status code
       }
       else {
-        //item._rev = res.body.rev;
-        //res.send(item);
-        res.redirect('dash');
+        var rating = createRating(item._id);
+        req.body = rating;
+        db.createitem(req, res, function(err) {
+          if(err) {
+            console.log("Error Saving Rating");
+            //TODO
+            // handle error with status code
+          }
+          else {
+            res.redirect('dash');
+          }
+        });
       }
     });
   }
@@ -92,13 +101,15 @@ exports.musicpage = function(req, res, next) {
         var music = rows[0];
         var comments = rows[1];
         var tracks = rows[2];
+        var rating = rows[3];
         // If the current user is the owner of the music, show them their version of the page
         if(music.user_id === req.session.user._id) {
           res.render('usermusicpage', { 
             title: 'Dischost: ' + music.artist + ' - ' + music.title,
             item: music,
             comments: comments,
-            tracklist: tracks
+            tracklist: tracks,
+            rating: rating
           });
         }
         else {
@@ -106,7 +117,8 @@ exports.musicpage = function(req, res, next) {
             title: 'Dischost: ' + music.artist + ' - ' + music.title,
             item: music,
             comments: comments,
-            tracklist: tracks
+            tracklist: tracks,
+            rating: rating
           });
         }
       }
@@ -256,6 +268,7 @@ exports.uploadtrack = function(req, res, next) {
         // handle error with status code
       }
       else {
+        progress[req.session.user._id] = 0;   //reset the upload progress variable for this session
         res.redirect('/edittracks/' + req.body.music_id);
       }
     });
@@ -268,6 +281,7 @@ function splitMusicData(rows) {
   var music;
   var comments = [];
   var tracks = [];
+  var rating;
   var j = 0; // Counter for comments array
   var k = 0; // Counter for tracks array
   for(var i = 0; i != rows.length; i++) {
@@ -282,6 +296,23 @@ function splitMusicData(rows) {
       tracks[k] = rows[i].value;
       k++;
     }
+    if(rows[i].value.collection == "rating") {
+      rating = rows[i].value;
+      console.log("rating")
+    }
   }
-  return[music, comments, tracks];
+  return[music, comments, tracks, rating];
+};
+
+// This function is used to create a rating for a new music item
+// initially all the values will be set to zero for the rating
+function createRating(musicId) {
+  var item = {
+    _id: uuid.v1(),
+    collection: "rating",
+    music_id: musicId,
+    avg: 0,
+    ratings: [0, 0, 0, 0, 0]
+  };
+  return item;
 };

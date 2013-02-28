@@ -17,7 +17,7 @@ block content
       div#rating
         h2 User Rating
         form#rating-form
-          input(type="hidden", name="dataset", value="apples")
+          input(type="hidden", name="dataset", value="bananas")
           input(type="hidden", name="dataset", value="oranges")
           p#rating-label 3.8
         script(src="/javascripts/d3.v3/d3.v3.min.js")
@@ -26,7 +26,7 @@ block content
         h2#player-header.block-header Player
           img#player-arrow.arrow(src="/images/arr-down.png")
         div#player-items
-          p#current-play Lorem ipsum dolor sit amet consectetur adipiscing
+          p#current-play Music Player
           audio#player(controls)
     div#centre
       div#music-details
@@ -39,6 +39,8 @@ block content
         p.details Format: 
           span.bold #{item.format}
         a.details-link(href='/rate/' + item._id) Rate This
+        form#rate-this(method="POST", action="/ratemusic")
+          
       div#tracklist
         h2#tracklist-header.block-header Tracklist
           img#tracklist-arrow.arrow(src="/images/arr-down.png")

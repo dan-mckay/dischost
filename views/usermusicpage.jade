@@ -19,7 +19,7 @@ block content
         form#rating-form
           input(type="hidden", name="dataset", value="apples")
           input(type="hidden", name="dataset", value="oranges")
-          p#rating-label 3.8
+          p#rating-label #{rating.avg}
         script(src="/javascripts/d3.v3/d3.v3.min.js")
         script(src="/javascripts/donut.js")
       div#player-div

@@ -1,5 +1,5 @@
 var dataset = {
-  apples: [53245, 28479, 19697, 24037, 40245],
+  bananas: [53245, 28479, 19697, 24037, 40245],
   oranges: [200, 200, 200, 200, 200]
 };
 
@@ -23,7 +23,7 @@ var svg = d3.select("#rating").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var path = svg.selectAll("path")
-    .data(pie(dataset.apples))
+    .data(pie(dataset.bananas))
   .enter().append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc)
