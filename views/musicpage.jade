@@ -2,7 +2,20 @@ extends layout
 
 block content
   script(src="/javascripts/musicpage.js")
+  script(src='/socket.io/socket.io.js')
+  script
+    var socket = io.connect('http://192.168.1.137:3000');
+    socket.on('connect', function() {
+      socket.emit('rating_id', "#{rating._id}");
+    });
+    socket.on('update', function(data) {
+      var myData = JSON.parse(data);
+      console.log(data);
+      var p = document.getElementById('test-p');
+      p.innerHTML = myData;
+    });
   div#music
+    p#test-p
     div#left-col
       - if(item.artwork)
         img(src='https://everton.iriscouch.com/dischost/#{item._id}/#{item.artwork}', alt='Music Artwork', width='200px', height='200px')
@@ -19,7 +32,7 @@ block content
         form#rating-form
           input(type="hidden", name="dataset", value="bananas")
           input(type="hidden", name="dataset", value="oranges")
-          p#rating-label 3.8
+          p#rating-label #{rating.avg}
         script(src="/javascripts/d3.v3/d3.v3.min.js")
         script(src="/javascripts/donut.js")
       div#player-div
@@ -40,7 +53,22 @@ block content
           span.bold #{item.format}
         a.details-link(href='/rate/' + item._id) Rate This
         form#rate-this(method="POST", action="/ratemusic")
-          
+          input(type="hidden", name="_id", value="#{rating._id}")
+          input(type="hidden", name="_rev", value="#{rating._rev}")
+          input(type="hidden", name="music_id", value="#{item._id}")
+          input(type="hidden", name="avg", value="#{rating.avg}")
+          input(type="hidden", name="ratings", value="#{rating.ratings}")
+          input#one(type="radio", name="rating", value="1")
+          label.radio-label(for="one") 1
+          input#two(type="radio", name="rating", value="2")
+          label.radio-label(for="two") 2
+          input#three(type="radio", name="rating", value="3")
+          label.radio-label(for="three") 3
+          input#four(type="radio", name="rating", value="4")
+          label.radio-label(for="four") 4
+          input#five(type="radio", name="rating", value="5")
+          label.radio-label(for="five") 5
+          button(class="submitbtn", role="button") Rate This
       div#tracklist
         h2#tracklist-header.block-header Tracklist
           img#tracklist-arrow.arrow(src="/images/arr-down.png")

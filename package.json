@@ -1,5 +1,5 @@
 {
-  "name": "Dischost",
+  "name": "dischost",
   "description": "Music Catalogue Application - 4th Year Final Project",
   "version": "0.0.1",
   "author": "Daniel McKay <mckayefc@gmail.com>",
@@ -12,7 +12,8 @@
     "jade": "*",
     "request": "2.12.0",
     "node-uuid": "1.4.0",
-    "socket.io": "0.9.13"
+    "socket.io": "0.9.13",
+    "follow": "0.8.0"
   },
   "devDependencies": {
     "nodemon": "*"

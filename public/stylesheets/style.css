@@ -539,6 +539,13 @@ audio {
 	cursor: pointer;
 }
 
+.radio-label {
+	float: none;
+	text-align: center;
+	width: 0px;
+	padding-top: 0px;
+}
+
 /***********SEARCH PAGES************/
 
 .centre-head {

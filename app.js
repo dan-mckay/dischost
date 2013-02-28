@@ -6,7 +6,9 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+
 var io = require('socket.io');
+var https = require('https');
 // Import routes for application
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -85,62 +87,12 @@ app.post('/addtrack', requiresLogin, music.addtrack);
 app.post('/uploadartwork', requiresLogin, music.uploadartwork);
 app.post('/uploadtrack', requiresLogin, music.uploadtrack);
 app.get('/music/:id', requiresLogin, music.musicpage);
+app.post('/ratemusic', requiresLogin, music.ratemusic);
 
 app.get('/search', requiresLogin, search.searchpage);
 app.post('/search/user', requiresLogin, search.usersearch);
 app.post('/search/music', requiresLogin, search.musicsearch);
 
-// WEBPAGE TEST STUFF
-app.get('/user/music', function(req, res) {
-  var item1 = { 
-        artist: "Kraftwerk",
-        title: "The Man Machine",
-        label: "EMI",
-        year: "1981",
-        format: "LP",
-        review: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt turpis, non lobortis nisl nunc blandit mauris. Fusce facilisis, felis aliquam sagittis eleifend, lacus elit ultrices mauris, nec commodo dolor orci a tellus. Maecenas sit amet elementum orci. Curabitur quam mi, ultrices volutpat ultrices eu, ornare eget nibh. In hac habitasse platea dictumst."
-      };
-  var comments = [
-        {username: "Daniel", comment: "I love this album!"},
-        {username: "Miriam", comment: "I can't stand it. I hate Kraftwerk"},
-        {username: "John", comment: "I haven't heard it."},
-        {username: "Roisin", comment: "Me neither."},
-        {username: "VerboseBore", comment: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt"}
-  ];
-  res.render('musicpage', { 
-    title: "blah",
-    item: item1,
-    comments: comments
-  });
-});
-
-app.get('/results', function(req, res) {
-  var results = {
-    msg: 'Not what you were looking for?',
-    resultlist: [
-      { name: 'Daniel', link: '/users/Daniel'}
-    ]
-  }
-  res.render('results', {
-    title: "Search",
-    results: results
-  });
-});
-
-app.get('/user/edittracks', function(req, res) {
-  var item1 = { 
-        artist: "Kraftwerk",
-        title: "The Man Machine",
-        label: "EMI",
-        year: "1981",
-        format: "LP",
-        review: "Curabitur quis dolor nibh. Vestibulum mollis pulvinar metus vitae commodo. Suspendisse a sapien rhoncus purus aliquam iaculis sit amet id dolor. Praesent pharetra, neque quis volutpat iaculis, nunc nunc tincidunt turpis, non lobortis nisl nunc blandit mauris. Fusce facilisis, felis aliquam sagittis eleifend, lacus elit ultrices mauris, nec commodo dolor orci a tellus. Maecenas sit amet elementum orci. Curabitur quam mi, ultrices volutpat ultrices eu, ornare eget nibh. In hac habitasse platea dictumst."
-      };
-  res.render('edittracks', { 
-    title: "edit tracks",
-    item: item1
-  });
-});
 
 
 function requiresLogin(req, res, next) {
@@ -153,21 +105,47 @@ function requiresLogin(req, res, next) {
   }
 };
 
-/*http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-});*/
-
+// SOCKET.IO SERVER
 io.sockets.on('connection', function(socket) {
-  
+  // Take in ID from upload track client
   socket.on('id', function(id) {
     socket._id = id;
   });
-
+  // Emit progress to upload track client
   socket.on('uploadProgress', function() {
     socket.emit('progress', progress[socket._id]);
+  });
+  // Take in ID from musicpage client and listen for changes in rating
+  socket.on('rating_id', function(id) {
+    var host = "https://everton.iriscouch.com";
+    var path = "/dischost/_changes?feed=continuous";
+    // Request feed from couchDB, callback on response
+    https.get(host + path, function(response) {
+      response.setEncoding('ascii');
+      var message = "";   //variable that builds the string of chunks
+      response.on('data', function(chunk) {
+        message += chunk;
+        var update = JSON.parse(message);
+        // if the updated doc ID is the same as the rating ID sent by the client
+        if(update.id == id) {
+          console.log("getting document...");
+          // Create another request to get updated document
+          https.get(host + '/dischost/' + id, function(docResp) {
+            // When response is returned, send to all connected clients
+            docResp.setEncoding('ascii');
+            docResp.on('data', function(doc) {
+              io.sockets.emit('update', doc);
+            });
+          });
+        }
+      });
+    });
   });
 
   socket.on('disconnect', function() {
     console.log('socket disconnected');
   });
 });
+
+
+

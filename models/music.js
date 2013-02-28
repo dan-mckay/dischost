@@ -13,6 +13,7 @@ var musicView = "_design/music/_view/";
 // CREATE NEW ITEM
 exports.createitem = function(req, res, next) {
   var item = req.body;
+  console.log(item);
   // use the "request" module to build the request to database
   request.put( {
       url: host + db + item._id,
@@ -125,7 +126,8 @@ exports.uploadMp3 = function(req, res, next) {
   });
 
   requestStream.on('error', function(error) {
-    throw new Error(error);
+    res.statusCode = 500;
+    res.end(String(error));
   });
 
   readStream.pipe(requestStream);

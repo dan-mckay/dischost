@@ -275,6 +275,39 @@ exports.uploadtrack = function(req, res, next) {
   }
 };
 
+// Take form data and pass to database for new comment
+exports.ratemusic = function(req, res, next) {
+  if(req.method == "POST") {
+    var rate = parseInt(req.body.rating);
+    var toJson = JSON.parse("[" + req.body.ratings + "]");
+    var ratings = updateRatings(rate, toJson);
+    var average = updateAverage(ratings);
+    var item = {
+      _id: req.body._id,
+      _rev: req.body._rev,
+      collection: "rating",
+      music_id: req.body.music_id,
+      avg: average,
+      ratings: ratings
+    };
+    req.body = item;
+    // Put comment into database
+    db.createitem(req, res, function(err) {
+      if(err) {
+        console.log("Error Saving Data");
+        //TODO
+        // handle error with status code
+      }
+      else {
+        res.redirect('/music/' + item.music_id);
+      }
+    });
+  }
+  else {
+    console.log("Not a post request - error");
+  }
+};
+
 // Loop through the rows returned by db query and split them
 // into music comments and tracks objects and return them as an array
 function splitMusicData(rows) {
@@ -315,4 +348,34 @@ function createRating(musicId) {
     ratings: [0, 0, 0, 0, 0]
   };
   return item;
+};
+
+// This function is used to update the array of ratings to 
+// incorporate a new rating by adding to the corresponding index value
+function updateRatings(rating, ratingArray) {
+  if(rating === 1) ratingArray[0] ++;
+  else if(rating === 2) ratingArray[1] ++;
+  else if(rating === 3) ratingArray[2] ++;
+  else if(rating === 4) ratingArray[3] ++;
+  else if(rating === 5) ratingArray[4] ++;
+
+  return ratingArray;
+};
+
+// This function is called after the above function
+// to update the average rating
+function updateAverage(arr) {
+  var numVotes = 0;   // Count for total votes
+  var sum = 0;        // Count for total value of votes
+  var temp = 0;       // Temp var for rounding the average
+  var ave = 0;        // Return var (average rating)
+  for(var i = 0; i != arr.length; i++) {
+    numVotes = numVotes + arr[i];
+    // This multiplies the vote count by what it is worth
+    sum = ((i + 1) * arr[i]) + sum;
+  }
+  temp = sum / numVotes;
+  // Rounds the average off to 1 decimal place
+  ave = Math.round(temp * 10) / 10;
+  return ave;
 };
