@@ -9,6 +9,7 @@ var path = require('path');
 
 var io = require('socket.io');
 var https = require('https');
+var follow = require('follow');
 // Import routes for application
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -117,9 +118,16 @@ io.sockets.on('connection', function(socket) {
   });
   // Take in ID from musicpage client and listen for changes in rating
   socket.on('rating_id', function(id) {
-    var host = "https://everton.iriscouch.com";
-    var path = "/dischost/_changes?feed=continuous";
-    // Request feed from couchDB, callback on response
+    // Use the follow module to listen for changes in the database
+    var options = { db: "https://everton.iriscouch.com/dischost", include_docs: true, since: "now" };
+    follow(options, function(error, change) {
+      if(!error) {
+        io.sockets.emit('update', change.doc);
+      }
+    });
+  });
+    
+    /*// Request feed from couchDB, callback on response
     https.get(host + path, function(response) {
       response.setEncoding('ascii');
       var message = "";   //variable that builds the string of chunks
@@ -134,13 +142,12 @@ io.sockets.on('connection', function(socket) {
             // When response is returned, send to all connected clients
             docResp.setEncoding('ascii');
             docResp.on('data', function(doc) {
-              io.sockets.emit('update', doc);
+              
             });
           });
         }
       });
-    });
-  });
+    });*/
 
   socket.on('disconnect', function() {
     console.log('socket disconnected');
